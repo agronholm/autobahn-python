@@ -27,11 +27,13 @@
 from __future__ import absolute_import
 
 import binascii
+import six
 
 from twisted.python import log
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import Int32StringReceiver
 from twisted.internet.error import ConnectionDone
+from twisted.internet.task import LoopingCall
 
 from autobahn.twisted.util import peer2str
 from autobahn.wamp.exception import ProtocolError, SerializationError, TransportLost
@@ -52,6 +54,35 @@ class WampRawSocketProtocol(Int32StringReceiver):
     def connectionMade(self):
         if self.factory.debug:
             log.msg("WampRawSocketProtocol: connection made")
+
+        # transport write-coalescing
+        #
+        if self.factory._coalesce:
+
+            _write = self.transport.write
+
+            self._buffer = []
+
+            def transport_write(data):
+                self._buffer.append(data)
+
+            self.transport.write = transport_write
+
+            def buffer_write():
+                if self._buffer:
+                    _write(''.join(self._buffer))
+                    self._buffer = []
+
+            self._buffer_writer = LoopingCall(buffer_write)
+            self._buffer_writer.start(float(self.factory._coalesce) / 1000000.)
+
+            if True or self.factory.debug:
+                log.msg("WampRawSocketProtocol: transport write-coalescing enabled ({0} ms period)".format(self.factory._coalesce))
+        else:
+            self._buffer_writer = None
+
+            if True or self.factory.debug:
+                log.msg("WampRawSocketProtocol: using default transport write-through")
 
         # the peer we are connected to
         #
@@ -81,7 +112,7 @@ class WampRawSocketProtocol(Int32StringReceiver):
         #
         self._handshake_bytes = b''
 
-        # Clinet requested maximum length of serialized messages.
+        # Client requested maximum length of serialized messages.
         #
         self._max_len_send = None
 
@@ -101,6 +132,7 @@ class WampRawSocketProtocol(Int32StringReceiver):
     def connectionLost(self, reason):
         if self.factory.debug:
             log.msg("WampRawSocketProtocol: connection lost: reason = '{0}'".format(reason))
+
         try:
             wasClean = isinstance(reason.value, ConnectionDone)
             self._session.onClose(wasClean)
@@ -109,6 +141,10 @@ class WampRawSocketProtocol(Int32StringReceiver):
             if self.factory.debug:
                 log.msg("WampRawSocketProtocol: ApplicationSession.onClose raised ({0})".format(e))
         self._session = None
+
+        if self._buffer_writer:
+            self._buffer_writer.stop()
+            self._buffer_writer = None
 
     def stringReceived(self, payload):
         if self.factory.debug:
@@ -322,7 +358,7 @@ class WampRawSocketServerFactory(WampRawSocketFactory):
     """
     protocol = WampRawSocketServerProtocol
 
-    def __init__(self, factory, serializers=None, debug=False):
+    def __init__(self, factory, serializers=None, coalesce=10000, debug=False):
         """
 
         :param factory: A callable that produces instances that implement
@@ -332,9 +368,19 @@ class WampRawSocketServerFactory(WampRawSocketFactory):
            serializers). Serializers must implement
            :class:`autobahn.wamp.interfaces.ISerializer`.
         :type serializers: list
+        :param coalesce: Coalesce writes within this many ms. If active (>0 ms), writes are not
+            directly passed to the underlying Twisted stream transport, all writes
+            during a period of the given ms, the written data is coalesced into a flat buffer,
+            and that buffer is then written to the underlying Twisted transport at the end of the
+            period. When a new period starts with an empty coalescing buffer. Enabling this feature
+            can massively increase the throughput by reducing the syscall rate and reducing the
+            data moving overhead - at the price of increased latencies.
+        :type coalesce: None or int
         """
         assert(callable(factory))
+        assert(coalesce is None or (type(coalesce) in six.integer_types and (coalesce == 0 or (coalesce >= 500 and coalesce <= 100000))))
         self._factory = factory
+        self._coalesce = coalesce
 
         self.debug = debug
 
@@ -371,7 +417,7 @@ class WampRawSocketClientFactory(WampRawSocketFactory):
     """
     protocol = WampRawSocketClientProtocol
 
-    def __init__(self, factory, serializer=None, debug=False):
+    def __init__(self, factory, serializer=None, coalesce=10000, debug=False):
         """
 
         :param factory: A callable that produces instances that implement
@@ -381,9 +427,19 @@ class WampRawSocketClientFactory(WampRawSocketFactory):
            serializer). Serializers must implement
            :class:`autobahn.wamp.interfaces.ISerializer`.
         :type serializer: obj
+        :param coalesce: Coalesce writes within this many ms. If active (>0 ms), writes are not
+            directly passed to the underlying Twisted stream transport, all writes
+            during a period of the given ms, the written data is coalesced into a flat buffer,
+            and that buffer is then written to the underlying Twisted transport at the end of the
+            period. When a new period starts with an empty coalescing buffer. Enabling this feature
+            can massively increase the throughput by reducing the syscall rate and reducing the
+            data moving overhead - at the price of increased latencies.
+        :type coalesce: None or int
         """
         assert(callable(factory))
+        assert(coalesce is None or (type(coalesce) in six.integer_types and (coalesce == 0 or (coalesce >= 500 and coalesce <= 100000))))
         self._factory = factory
+        self._coalesce = coalesce
 
         self.debug = debug
 
