@@ -107,7 +107,7 @@ if PY3:
         extras_require_asyncio = []
 else:
     # backport of asyncio
-    extras_require_asyncio = ["trollius>=0.1.2", "futures>=2.1.5"]
+    extras_require_asyncio = ["trollius>=1.0.4", "futures>=3.0.3"]
 
 
 # C-based WebSocket acceleration
@@ -167,7 +167,7 @@ setup(
     platforms='Any',
     install_requires=[
         'six>=1.6.1',
-        'txaio>=1.0.0'
+        'txaio>=1.0.2'
     ],
     extras_require={
         'all': extras_require_all,
