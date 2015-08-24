@@ -10,7 +10,7 @@ class MyComponent(ApplicationSession):
         # this procedure if its connected to the same router and realm.
         def add2(x, y):
             return x + y
-        yield from self.register(add2, 'com.myapp.add2');
+        yield from self.register(add2, 'com.myapp.add2')
 
         # publish an event every second. The event payloads can be
         # anything JSON- and msgpack- serializable
@@ -21,7 +21,7 @@ class MyComponent(ApplicationSession):
 
 if __name__ == '__main__':
     runner = ApplicationRunner(
-        environ.get("AUTOBAHN_DEMO_ROUTER", "ws://localhost:8080/ws"),
+        environ.get("AUTOBAHN_DEMO_ROUTER", "ws://127.0.0.1:8080/ws"),
         u"crossbardemo",
         debug_wamp=False,  # optional; log many WAMP details
         debug=False,  # optional; log even more details
