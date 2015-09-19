@@ -1,5 +1,5 @@
 from twisted.internet.defer import inlineCallbacks as coroutine
-from autobahn.twisted import Client
+from autobahn.twisted.wamp import Client
 
 
 @coroutine
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # "on_join" is a Session event that bubbled up via Connection
     # to Client here. this works since Connection/Session have default
     # implementations that by using WAMP defaults
-    client.on_join(on_join)
+    client.on('join', on_join)
 
     # now make it run ..
-    client.run()
+    client.start()

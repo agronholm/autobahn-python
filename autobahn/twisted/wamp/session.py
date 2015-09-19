@@ -35,7 +35,7 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn.wamp import protocol
 from autobahn.wamp.types import ComponentConfig
 from autobahn.websocket.protocol import parseWsUrl
-from autobahn.twisted.websocket import WampWebSocketClientFactory
+from autobahn.twisted.wamp.websocket import WampWebSocketClientFactory
 
 import txaio
 txaio.use_twisted()

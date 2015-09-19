@@ -36,7 +36,7 @@ from twisted.internet.interfaces import IStreamServerEndpointStringParser, \
 
 from twisted.internet.endpoints import serverFromString, clientFromString
 
-from autobahn.twisted.websocket import WrappingWebSocketServerFactory, \
+from autobahn.twisted.websocket.websocket import WrappingWebSocketServerFactory, \
     WrappingWebSocketClientFactory
 
 

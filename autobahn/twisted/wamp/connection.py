@@ -24,61 +24,23 @@
 #
 ###############################################################################
 
+
 from __future__ import absolute_import
 
-from autobahn.wamp.types import \
-    SessionDetails, \
-    CloseDetails, \
-    RegisterOptions, \
-    CallOptions, \
-    CallDetails, \
-    CallResult, \
-    SubscribeOptions, \
-    PublishOptions, \
-    EventDetails
+from twisted.internet.defer import Deferred
+from autobahn.wamp import connection
 
-from autobahn.wamp.exception import \
-    Error, \
-    SessionNotReady, \
-    SerializationError, \
-    ProtocolError, \
-    TransportLost, \
-    ApplicationError, \
-    InvalidUri
-
-from autobahn.wamp.interfaces import \
-    IBaseSession, \
-    ISession
-
-from autobahn.wamp.uri import \
-    error, \
-    register, \
-    subscribe
+__all__ = ('Connection')
 
 
-__all__ = (
-    'SessionDetails',
-    'CloseDetails',
-    'RegisterOptions',
-    'CallOptions',
-    'CallDetails',
-    'CallResult',
-    'SubscribeOptions',
-    'PublishOptions',
-    'EventDetails',
+class Connection(connection.Connection):
 
-    'Error',
-    'SessionNotReady',
-    'SerializationError',
-    'ProtocolError',
-    'TransportLost',
-    'ApplicationError',
-    'InvalidUri',
+    def __init__(self, main, transports=u'ws://127.0.0.1:8080/ws', realm=u'default', reactor=None):
+        connection.Connection.__init__(self, transports, realm)
+        print "xxxx"
 
-    'IBaseSession',
-    'ISession',
-
-    'error',
-    'register',
-    'subscribe',
-)
+    def connect(self, reactor, main):
+        print "YYY", reactor, main
+        d = Deferred()
+        d.callback(None)
+        return d

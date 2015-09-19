@@ -211,7 +211,23 @@ class ITransportHandler(object):
 
 
 @six.add_metaclass(abc.ABCMeta)
-class ISession(object):
+class IClient(object):
+    """
+    """
+
+    @abc.abstractmethod
+    def start(self):
+        pass
+
+
+@six.add_metaclass(abc.ABCMeta)
+class IConnection(object):
+    """
+    """
+
+
+@six.add_metaclass(abc.ABCMeta)
+class IBaseSession(object):
     """
     Base interface for WAMP sessions.
     """
@@ -293,7 +309,7 @@ class ISession(object):
 
 
 @six.add_metaclass(abc.ABCMeta)
-class IApplicationSession(ISession):
+class ISession(IBaseSession):
     """
     Interface for WAMP client peers implementing the four different
     WAMP roles (caller, callee, publisher, subscriber).

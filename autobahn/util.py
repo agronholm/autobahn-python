@@ -460,9 +460,10 @@ def wildcards2patterns(wildcards):
     return [re.compile(wc.replace('.', '\.').replace('*', '.*')) for wc in wildcards]
 
 
-class Observable(object):
+class ObservableMixin(object):
 
-    def __init__(self):
+    def __init__(self, parent=None):
+        self._parent = parent
         self._listeners = {}
 
     def on(self, event, handler):

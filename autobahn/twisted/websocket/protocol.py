@@ -57,20 +57,13 @@ __all__ = (
     'WebSocketAdapterFactory',
     'WebSocketServerFactory',
     'WebSocketClientFactory',
-
     'WrappingWebSocketAdapter',
     'WrappingWebSocketServerProtocol',
     'WrappingWebSocketClientProtocol',
     'WrappingWebSocketServerFactory',
     'WrappingWebSocketClientFactory',
-
     'listenWS',
     'connectWS',
-
-    'WampWebSocketServerProtocol',
-    'WampWebSocketServerFactory',
-    'WampWebSocketClientProtocol',
-    'WampWebSocketClientFactory',
 )
 
 
@@ -562,54 +555,3 @@ def listenWS(factory, contextFactory=None, backlog=50, interface=''):
     else:
         listener = reactor.listenTCP(factory.port, factory, backlog, interface)
     return listener
-
-
-class WampWebSocketServerProtocol(websocket.WampWebSocketServerProtocol, WebSocketServerProtocol):
-    """
-    Base class for Twisted-based WAMP-over-WebSocket server protocols.
-    """
-
-
-class WampWebSocketServerFactory(websocket.WampWebSocketServerFactory, WebSocketServerFactory):
-    """
-    Base class for Twisted-based WAMP-over-WebSocket server factories.
-    """
-
-    protocol = WampWebSocketServerProtocol
-
-    def __init__(self, factory, *args, **kwargs):
-
-        serializers = kwargs.pop('serializers', None)
-        debug_wamp = kwargs.pop('debug_wamp', False)
-
-        websocket.WampWebSocketServerFactory.__init__(self, factory, serializers, debug_wamp=debug_wamp)
-
-        kwargs['protocols'] = self._protocols
-
-        # noinspection PyCallByClass
-        WebSocketServerFactory.__init__(self, *args, **kwargs)
-
-
-class WampWebSocketClientProtocol(websocket.WampWebSocketClientProtocol, WebSocketClientProtocol):
-    """
-    Base class for Twisted-based WAMP-over-WebSocket client protocols.
-    """
-
-
-class WampWebSocketClientFactory(websocket.WampWebSocketClientFactory, WebSocketClientFactory):
-    """
-    Base class for Twisted-based WAMP-over-WebSocket client factories.
-    """
-
-    protocol = WampWebSocketClientProtocol
-
-    def __init__(self, factory, *args, **kwargs):
-
-        serializers = kwargs.pop('serializers', None)
-        debug_wamp = kwargs.pop('debug_wamp', False)
-
-        websocket.WampWebSocketClientFactory.__init__(self, factory, serializers, debug_wamp=debug_wamp)
-
-        kwargs['protocols'] = self._protocols
-
-        WebSocketClientFactory.__init__(self, *args, **kwargs)

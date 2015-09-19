@@ -24,61 +24,24 @@
 #
 ###############################################################################
 
+
 from __future__ import absolute_import
 
-from autobahn.wamp.types import \
-    SessionDetails, \
-    CloseDetails, \
-    RegisterOptions, \
-    CallOptions, \
-    CallDetails, \
-    CallResult, \
-    SubscribeOptions, \
-    PublishOptions, \
-    EventDetails
+# WebSocket protocol support
+from autobahn.asyncio.websocket import \
+    WebSocketServerProtocol, \
+    WebSocketClientProtocol, \
+    WebSocketServerFactory, \
+    WebSocketClientFactory
 
-from autobahn.wamp.exception import \
-    Error, \
-    SessionNotReady, \
-    SerializationError, \
-    ProtocolError, \
-    TransportLost, \
-    ApplicationError, \
-    InvalidUri
-
-from autobahn.wamp.interfaces import \
-    IBaseSession, \
-    ISession
-
-from autobahn.wamp.uri import \
-    error, \
-    register, \
-    subscribe
+# WAMP support
+from autobahn.asyncio.wamp import ApplicationSession
 
 
 __all__ = (
-    'SessionDetails',
-    'CloseDetails',
-    'RegisterOptions',
-    'CallOptions',
-    'CallDetails',
-    'CallResult',
-    'SubscribeOptions',
-    'PublishOptions',
-    'EventDetails',
-
-    'Error',
-    'SessionNotReady',
-    'SerializationError',
-    'ProtocolError',
-    'TransportLost',
-    'ApplicationError',
-    'InvalidUri',
-
-    'IBaseSession',
-    'ISession',
-
-    'error',
-    'register',
-    'subscribe',
+    'WebSocketServerProtocol',
+    'WebSocketClientProtocol',
+    'WebSocketServerFactory',
+    'WebSocketClientFactory',
+    'ApplicationSession',
 )

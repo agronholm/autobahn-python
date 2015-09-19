@@ -26,59 +26,12 @@
 
 from __future__ import absolute_import
 
-from autobahn.wamp.types import \
-    SessionDetails, \
-    CloseDetails, \
-    RegisterOptions, \
-    CallOptions, \
-    CallDetails, \
-    CallResult, \
-    SubscribeOptions, \
-    PublishOptions, \
-    EventDetails
-
-from autobahn.wamp.exception import \
-    Error, \
-    SessionNotReady, \
-    SerializationError, \
-    ProtocolError, \
-    TransportLost, \
-    ApplicationError, \
-    InvalidUri
-
-from autobahn.wamp.interfaces import \
-    IBaseSession, \
-    ISession
-
-from autobahn.wamp.uri import \
-    error, \
-    register, \
-    subscribe
-
+from autobahn.twisted.wamp.session import ApplicationSession
+from autobahn.twisted.wamp.connection import Connection
+from autobahn.twisted.wamp.client import Client
 
 __all__ = (
-    'SessionDetails',
-    'CloseDetails',
-    'RegisterOptions',
-    'CallOptions',
-    'CallDetails',
-    'CallResult',
-    'SubscribeOptions',
-    'PublishOptions',
-    'EventDetails',
-
-    'Error',
-    'SessionNotReady',
-    'SerializationError',
-    'ProtocolError',
-    'TransportLost',
-    'ApplicationError',
-    'InvalidUri',
-
-    'IBaseSession',
-    'ISession',
-
-    'error',
-    'register',
-    'subscribe',
+    'ApplicationSession',
+    'Connection',
+    'Client',
 )

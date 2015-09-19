@@ -26,59 +26,38 @@
 
 from __future__ import absolute_import
 
-from autobahn.wamp.types import \
-    SessionDetails, \
-    CloseDetails, \
-    RegisterOptions, \
-    CallOptions, \
-    CallDetails, \
-    CallResult, \
-    SubscribeOptions, \
-    PublishOptions, \
-    EventDetails
+# WebSocket protocol support
+from autobahn.twisted.websocket.protocol import \
+    WebSocketServerProtocol, \
+    WebSocketClientProtocol, \
+    WebSocketServerFactory, \
+    WebSocketClientFactory
 
-from autobahn.wamp.exception import \
-    Error, \
-    SessionNotReady, \
-    SerializationError, \
-    ProtocolError, \
-    TransportLost, \
-    ApplicationError, \
-    InvalidUri
+# support for running Twisted stream protocols over WebSocket
+from autobahn.twisted.websocket.protocol import \
+    WrappingWebSocketServerFactory, \
+    WrappingWebSocketClientFactory
 
-from autobahn.wamp.interfaces import \
-    IBaseSession, \
-    ISession
+# FIXME: remove these
+from autobahn.twisted.websocket.protocol import \
+    listenWS, \
+    connectWS
 
-from autobahn.wamp.uri import \
-    error, \
-    register, \
-    subscribe
+# Twisted Web support
+from autobahn.twisted.websocket.resource import \
+    WebSocketResource, \
+    WSGIRootResource
 
 
 __all__ = (
-    'SessionDetails',
-    'CloseDetails',
-    'RegisterOptions',
-    'CallOptions',
-    'CallDetails',
-    'CallResult',
-    'SubscribeOptions',
-    'PublishOptions',
-    'EventDetails',
-
-    'Error',
-    'SessionNotReady',
-    'SerializationError',
-    'ProtocolError',
-    'TransportLost',
-    'ApplicationError',
-    'InvalidUri',
-
-    'IBaseSession',
-    'ISession',
-
-    'error',
-    'register',
-    'subscribe',
+    'WebSocketServerProtocol',
+    'WebSocketClientProtocol',
+    'WebSocketServerFactory',
+    'WebSocketClientFactory',
+    'WrappingWebSocketServerFactory',
+    'WrappingWebSocketClientFactory',
+    'listenWS',
+    'connectWS',
+    'WebSocketResource',
+    'WSGIRootResource',
 )

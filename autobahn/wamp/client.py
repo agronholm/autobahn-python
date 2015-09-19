@@ -24,61 +24,22 @@
 #
 ###############################################################################
 
+
 from __future__ import absolute_import
 
-from autobahn.wamp.types import \
-    SessionDetails, \
-    CloseDetails, \
-    RegisterOptions, \
-    CallOptions, \
-    CallDetails, \
-    CallResult, \
-    SubscribeOptions, \
-    PublishOptions, \
-    EventDetails
+from autobahn.util import ObservableMixin
+from autobahn.wamp.interfaces import IClient
 
-from autobahn.wamp.exception import \
-    Error, \
-    SessionNotReady, \
-    SerializationError, \
-    ProtocolError, \
-    TransportLost, \
-    ApplicationError, \
-    InvalidUri
-
-from autobahn.wamp.interfaces import \
-    IBaseSession, \
-    ISession
-
-from autobahn.wamp.uri import \
-    error, \
-    register, \
-    subscribe
+__all__ = ('Client')
 
 
-__all__ = (
-    'SessionDetails',
-    'CloseDetails',
-    'RegisterOptions',
-    'CallOptions',
-    'CallDetails',
-    'CallResult',
-    'SubscribeOptions',
-    'PublishOptions',
-    'EventDetails',
+class Client(ObservableMixin):
 
-    'Error',
-    'SessionNotReady',
-    'SerializationError',
-    'ProtocolError',
-    'TransportLost',
-    'ApplicationError',
-    'InvalidUri',
+    def __init__(self, transports, realm):
+        ObservableMixin.__init__(self)
 
-    'IBaseSession',
-    'ISession',
+    def start(self):
+        pass
 
-    'error',
-    'register',
-    'subscribe',
-)
+
+IClient.register(Client)

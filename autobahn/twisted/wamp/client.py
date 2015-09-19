@@ -24,61 +24,16 @@
 #
 ###############################################################################
 
+
 from __future__ import absolute_import
 
-from autobahn.wamp.types import \
-    SessionDetails, \
-    CloseDetails, \
-    RegisterOptions, \
-    CallOptions, \
-    CallDetails, \
-    CallResult, \
-    SubscribeOptions, \
-    PublishOptions, \
-    EventDetails
+from autobahn.wamp import client
 
-from autobahn.wamp.exception import \
-    Error, \
-    SessionNotReady, \
-    SerializationError, \
-    ProtocolError, \
-    TransportLost, \
-    ApplicationError, \
-    InvalidUri
-
-from autobahn.wamp.interfaces import \
-    IBaseSession, \
-    ISession
-
-from autobahn.wamp.uri import \
-    error, \
-    register, \
-    subscribe
+__all__ = ('Client')
 
 
-__all__ = (
-    'SessionDetails',
-    'CloseDetails',
-    'RegisterOptions',
-    'CallOptions',
-    'CallDetails',
-    'CallResult',
-    'SubscribeOptions',
-    'PublishOptions',
-    'EventDetails',
+class Client(client.Client):
 
-    'Error',
-    'SessionNotReady',
-    'SerializationError',
-    'ProtocolError',
-    'TransportLost',
-    'ApplicationError',
-    'InvalidUri',
-
-    'IBaseSession',
-    'ISession',
-
-    'error',
-    'register',
-    'subscribe',
-)
+    def __init__(self, transports=u'ws://127.0.0.1:8080/ws', realm=u'default'):
+        client.Client.__init__(self, transports, realm)
+        print "Kjh"

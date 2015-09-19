@@ -24,61 +24,22 @@
 #
 ###############################################################################
 
+
 from __future__ import absolute_import
 
-from autobahn.wamp.types import \
-    SessionDetails, \
-    CloseDetails, \
-    RegisterOptions, \
-    CallOptions, \
-    CallDetails, \
-    CallResult, \
-    SubscribeOptions, \
-    PublishOptions, \
-    EventDetails
+from autobahn.util import ObservableMixin
 
-from autobahn.wamp.exception import \
-    Error, \
-    SessionNotReady, \
-    SerializationError, \
-    ProtocolError, \
-    TransportLost, \
-    ApplicationError, \
-    InvalidUri
-
-from autobahn.wamp.interfaces import \
-    IBaseSession, \
-    ISession
-
-from autobahn.wamp.uri import \
-    error, \
-    register, \
-    subscribe
+__all__ = ('Connection')
 
 
-__all__ = (
-    'SessionDetails',
-    'CloseDetails',
-    'RegisterOptions',
-    'CallOptions',
-    'CallDetails',
-    'CallResult',
-    'SubscribeOptions',
-    'PublishOptions',
-    'EventDetails',
+def check_transport(transport):
+    """
+    Check a WAMP transport configuration.
+    """
+    pass
 
-    'Error',
-    'SessionNotReady',
-    'SerializationError',
-    'ProtocolError',
-    'TransportLost',
-    'ApplicationError',
-    'InvalidUri',
 
-    'IBaseSession',
-    'ISession',
+class Connection(ObservableMixin):
 
-    'error',
-    'register',
-    'subscribe',
-)
+    def __init__(self, transports=u'ws://127.0.0.1:8080/ws', realm=u'default', reactor=None):
+        pass
