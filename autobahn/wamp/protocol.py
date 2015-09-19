@@ -901,7 +901,8 @@ class ApplicationSession(BaseSession):
         # XXX do we want to chain these to "d" from if block above?
         def do_disconnect(rtn):
             d0 = txaio.as_future(self.onDisconnect)
-            return rtn
+            return d0
+
         txaio.add_callbacks(d, do_disconnect, do_disconnect)
 
         def notify_disconnect(rtn):

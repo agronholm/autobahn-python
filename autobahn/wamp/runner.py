@@ -188,10 +188,8 @@ class Connection(object):
                 return None
 
         def on_success(proto):
-            #print("connected", proto)
             self.connect_count += 1
             self.protocol = proto
-            #print("SESS", self.session.joined)
             if self._main is not None:
                 if self._main:
                     self._main_done = txaio.as_future(self._main, self.session)
@@ -228,12 +226,10 @@ class Connection(object):
                 return f
 
     def _main_completed(self, arg):
-        #print("resolving _main_done", arg)
         if not txaio.is_called(self._main_done):
             txaio.resolve(self._main_done, arg)
 
     def _main_error(self, fail):
-        #print("REJECT", fail.value)
         print(txaio.failure_format_traceback(fail))
         if not txaio.is_called(self._main_done):
             txaio.reject(self._main_done, fail)
@@ -245,19 +241,18 @@ class Connection(object):
             )
             txaio.reject(self._done, fail)
 
-
     def _on_disconnect(self, reason):
-        #print("Disconnect; waiting for main to complete:", reason)
         def _really_done(arg):
-            #print("main completed:", arg, reason)
             if reason == 'closed':
                 txaio.resolve(self._done, None)
             else:
                 txaio.reject(self._done, Exception('Transport disconnected uncleanly: {}'.format(reason)))
             self._connecting = None
             self._done = None
+
         def _error(fail):
             print(txaio.failure_format_traceback(fail))
+
         txaio.add_callbacks(self._main_done, _really_done, _error)
         return self._main_done
 
@@ -299,11 +294,6 @@ class _ApplicationRunner(object):
 
         :param loop: the event-loop/IReactor instance to use
         """
-
-        assert(type(realm) == six.text_type)
-
-        self.realm = realm
-        self.extra = extra or dict()
         self.on = _ListenerCollection(['connection'])
 
         # the reactor or asyncio event-loop
