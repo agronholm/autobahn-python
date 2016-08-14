@@ -8,7 +8,7 @@ Changelog
 0.16.0
 ------
 
-`Published 2016-08-14 <https://pypi.python.org/pypi/autobahn/0.16.0`_
+`Published 2016-08-14 <https://pypi.python.org/pypi/autobahn/0.16.0>`_
 
 * new: new `autobahn.wamp.component` API in experimental stage
 * new: Ed25519 OpenSSH and OpenBSD signify key support
@@ -17,7 +17,7 @@ Changelog
 0.15.0
 ------
 
-`Published 2016-07-19 <https://pypi.python.org/pypi/autobahn/0.15.0`_
+`Published 2016-07-19 <https://pypi.python.org/pypi/autobahn/0.15.0>`_
 
 * new: WAMP AP option: register with maximum concurrency
 * new: automatic reconnect for WAMP clients ApplicationRunner on Twisted
